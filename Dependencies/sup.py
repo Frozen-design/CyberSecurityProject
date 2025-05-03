@@ -11,7 +11,7 @@ def print_lock(conTrue: int):
 
 # Print debug if conTrue set to 1
 @error_handling
-def print_if(debug: str, conTrue: int):
+def print_if(debug: str, conTrue = 0):
     if print_lock(conTrue):
         print(debug)
 
@@ -28,10 +28,5 @@ def parse_csv(file_path: str, headers: bool = True, names=['Text', 'Class'], dty
     if data.empty:
         raise ValueError("The CSV file is empty or not formatted correctly.")
     data = data.dropna(subset=['Text', 'Class'])
-    data = data.as_matrix(columns=['Text', 'Class'])
-    if data.shape[1] != 2:
-        raise ValueError("The CSV file must contain exactly two columns: 'Text' and 'Class'.")
-    if not all(data[:, 1].astype(int) == data[:, 1]):
-        raise ValueError("The 'Class' column must contain integer values.")
     return data
 
