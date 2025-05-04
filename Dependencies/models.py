@@ -135,6 +135,9 @@ class ModelContainer():
     def predict(self, model, data):
         """Make predictions using the provided model on the given data."""
 
+        # Ensure data is an iterable (e.g., list of strings)
+        if isinstance(data, str):
+            data = [data]
 
         if isinstance(model, KNeighborsClassifier):
             
@@ -157,7 +160,7 @@ class ModelContainer():
             padded_sequences = pad_sequences(sequences, maxlen=max_length)
             data_predict = padded_sequences
 
-            return (model.predict(data_predict) > 0.5).astype(int).flatten()  # Convert probabilities to binary predictions
+            return model.predict(data_predict)
         
         else:
             raise ValueError("Unsupported model type for prediction.")
