@@ -24,19 +24,18 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.preprocessing import normalize
 from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score
 
-def model_stats(model, test_data, predictions, test_labels):
+def model_stats(predictions, test_labels):
     """
-    Calculate and return various evaluation metrics for the KNN model.
+    Calculate and return various evaluation metrics for the model.
     """
 
     accuracy = np.mean(predictions == test_labels)
     precision = precision_score(test_labels, predictions, average='weighted')
     recall = recall_score(test_labels, predictions, average='weighted')
     f1 = f1_score(test_labels, predictions, average='weighted')
-    auc_score = roc_auc_score(test_labels, model.predict_proba(test_data)[:, 1])
     mse = np.mean((predictions - test_labels) ** 2)
 
-    return {"accuracy": accuracy, "precision": precision, "recall": recall, "f1": f1, "auc_score": auc_score, "mse": mse}
+    return {"accuracy": accuracy, "precision": precision, "recall": recall, "f1": f1, "mse": mse}
 
 class ModelContainer():
     def __init__(self, user_file_path: str, SPRINT: bool = True, STATS: int = 1, TXT_COL: str = 'Text', CLASS_COL: str = 'Class'):

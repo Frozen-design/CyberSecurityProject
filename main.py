@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 from Dependencies.sup import print_if
-from Dependencies.models import ModelContainer
+from Dependencies.models import ModelContainer, model_stats
 
 '''
 Phishing attacks are one of the most common cybersecurity threats. 
@@ -78,9 +78,6 @@ def main():
                 for i in range(len(messageList)):
                     print(messageList[i])
                 print("=" * length0)
-                print()
-                input("Enter anything to continue to accuracy of models... ")
-                print("=" * length0)
                 knn_preds = model_container.predict(knn, testing_data)
                 mnb_preds = model_container.predict(mnb, testing_data)
                 cnn_preds = model_container.predict(cnn, testing_data)
@@ -93,17 +90,33 @@ def main():
                     'CNN_Predictions': cnn_preds
                 })
                 predictions_mean = (combined_predictions.mean(axis=1) > 0.5).astype(int).to_numpy().flatten()  # Average predictions and round to nearest integer
-                knn_accuracy = np.mean(knn_preds == testing_labels)
-                mnb_accuracy = np.mean(mnb_preds == testing_labels)
-                cnn_accuracy = np.mean(cnn_preds == testing_labels)
 
-                print_if(f"KNN model accuracy: {knn_accuracy:.2f}", SPRINT)
-                print_if(f"Multinomial NB model accuracy: {mnb_accuracy:.2f}", SPRINT)
-                print_if(f"CNN model accuracy: {cnn_accuracy:.2f}", SPRINT)
+                input("Enter anything to continue to extra stats of the models... ")
+                print("=" * length0)
 
-                combined_predictions['Combined_Predictions'] = predictions_mean
-                combined_accuracy = np.mean(predictions_mean == testing_labels)
-                print_if(f"Combined model accuracy: {combined_accuracy:.2f}", SPRINT)
+                stats_KNN = model_stats(knn_preds, testing_labels)
+                stats_MNB = model_stats(mnb_preds, testing_labels)
+                stats_CNN = model_stats(cnn_preds, testing_labels)
+                stats_combined = model_stats(predictions_mean, testing_labels)
+
+                print("KNN Model Stats:")
+                for key, value in stats_KNN.items():
+                    print(f"{key}: {value}")
+                print("=" * length0)
+
+                print("Multinomial NB Model Stats:")
+                for key, value in stats_MNB.items():
+                    print(f"{key}: {value}")
+                print("=" * length0)
+
+                print("CNN Model Stats:")
+                for key, value in stats_CNN.items():
+                    print(f"{key}: {value}")
+                print("=" * length0)
+
+                print("Combined Model Stats:")
+                for key, value in stats_combined.items():
+                    print(f"{key}: {value}")
                 print("=" * length0)
                 
             case 2:
